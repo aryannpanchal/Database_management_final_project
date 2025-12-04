@@ -52,6 +52,19 @@ public class DBNinja {
     }
 
     // -------------------------
+    // Timestamp helper (strip .0)
+    // -------------------------
+
+    private static String normalizeTimestamp(Timestamp ts) {
+        if (ts == null) return "";
+        String raw = ts.toString();              // e.g. 2025-01-03 21:30:00.0
+        if (raw.endsWith(".0")) {
+            raw = raw.substring(0, raw.length() - 2);
+        }
+        return raw;
+    }
+
+    // -------------------------
     // addOrder
     // -------------------------
 
@@ -409,7 +422,8 @@ public class DBNinja {
 
         ArrayList<Discount> list = new ArrayList<>();
         String sql = "SELECT discount_DiscountID, discount_DiscountName, discount_Amount, discount_IsPercent " +
-                     "FROM discount ORDER BY discount_DiscountID";
+                     "FROM discount " +
+                     "ORDER BY discount_DiscountName";
 
         try (Statement st = conn.createStatement();
              ResultSet rs = st.executeQuery(sql)) {
@@ -513,7 +527,8 @@ public class DBNinja {
 
         ArrayList<Customer> list = new ArrayList<>();
         String sql = "SELECT customer_CustID, customer_FName, customer_LName, customer_PhoneNum " +
-                     "FROM customer ORDER BY customer_CustID";
+                     "FROM customer " +
+                     "ORDER BY customer_LName, customer_FName";
 
         try (Statement st = conn.createStatement();
              ResultSet rs = st.executeQuery(sql)) {
@@ -577,7 +592,7 @@ public class DBNinja {
         connectToDB();
 
         ArrayList<Topping> list = new ArrayList<>();
-        String sql = "SELECT * FROM topping ORDER BY topping_TopID";
+        String sql = "SELECT * FROM topping ORDER BY topping_TopName";
 
         try (Statement st = conn.createStatement();
              ResultSet rs = st.executeQuery(sql)) {
@@ -695,7 +710,7 @@ public class DBNinja {
                     int orderID = rs.getInt("ordertable_OrderID");
                     String state = rs.getString("pizza_PizzaState");
                     Timestamp ts = rs.getTimestamp("pizza_PizzaDate");
-                    String dateStr = (ts != null) ? ts.toString() : "";
+                    String dateStr = normalizeTimestamp(ts);
                     double custPrice = rs.getDouble("pizza_CustPrice");
                     double busPrice = rs.getDouble("pizza_BusPrice");
 
@@ -763,8 +778,8 @@ public class DBNinja {
         try (Statement st = conn.createStatement();
              ResultSet rs = st.executeQuery(sql)) {
 
-            System.out.printf("%-20s%-15s%n", "Topping", "ToppingCount");
-            System.out.printf("%-20s%-15s%n", "-------", "------------");
+            System.out.printf("%-20s%-15s%n", "Topping", "Topping Count");
+            System.out.printf("%-20s%-15s%n", "-------", "-------------");
 
             while (rs.next()) {
                 String name = rs.getString("Topping");
@@ -777,7 +792,7 @@ public class DBNinja {
     public static void printProfitByPizzaReport() throws SQLException, IOException {
         connectToDB();
 
-        String sql = "SELECT Size, Crust, Profit, OrderMonth FROM ProfitByPizza ORDER BY Profit ASC";
+        String sql = "SELECT Size, Crust, Profit, OrderMonth FROM ProfitByPizza";
         try (Statement st = conn.createStatement();
              ResultSet rs = st.executeQuery(sql)) {
 
@@ -827,7 +842,7 @@ public class DBNinja {
         int orderID = rs.getInt("ordertable_OrderID");
         String orderType = rs.getString("ordertable_OrderType");
         Timestamp ts = rs.getTimestamp("ordertable_OrderDateTime");
-        String dateStr = (ts != null) ? ts.toString() : "";
+        String dateStr = normalizeTimestamp(ts);
         double custPrice = rs.getDouble("ordertable_CustPrice");
         double busPrice = rs.getDouble("ordertable_BusPrice");
         boolean isComplete = rs.getBoolean("ordertable_IsComplete");
