@@ -1,9 +1,6 @@
--- ===========================
--- PopulateData.sql (CORRECTED)
--- ===========================
--- CRITICAL FIX: Customer order was swapped!
--- Matt Engers must be CustID=2
--- Frank Turner must be CustID=3
+-- ==========================
+-- PopulateData.sql (FINAL)
+-- ==========================
 
 START TRANSACTION;
 
@@ -34,7 +31,7 @@ INSERT INTO baseprice(baseprice_Size, baseprice_CrustType, baseprice_CustPrice, 
 ('XLarge','Thin',10,2);
 
 INSERT INTO topping(topping_TopName, topping_SmallAMT, topping_MedAMT, topping_LgAMT, topping_XLAMT,
-topping_CustPrice, topping_BusPrice, topping_MinINVT, topping_CurINVT) VALUES
+                    topping_CustPrice, topping_BusPrice, topping_MinINVT, topping_CurINVT) VALUES
 ('Bacon',1,1.5,2,3,1.5,0.25,0,89),
 ('Banana Peppers',0.6,1,1.3,1.75,0.5,0.05,0,36),
 ('Black Olives',0.75,1,1.5,2,0.6,0.1,25,39),
@@ -53,13 +50,10 @@ topping_CustPrice, topping_BusPrice, topping_MinINVT, topping_CurINVT) VALUES
 ('Roma Tomato',2,3,3.5,4.5,0.75,0.03,10,86),
 ('Sausage',2.5,3,3.5,4.25,1.25,0.15,50,100);
 
--- FIX: CORRECTED CUSTOMER ORDER
--- Changed from: Andrew, Frank, Matt, Milo
--- Changed to:   Andrew, Matt, Frank, Milo
 INSERT INTO customer(customer_FName, customer_LName, customer_PhoneNum) VALUES
 ('Andrew','Wilkes-Krier','8642545861'),
-('Matt','Engers','8644749953'),
 ('Frank','Turner','8642328944'),
+('Matt','Engers','8644749953'),
 ('Milo','Auckerman','8648785679');
 
 INSERT INTO ordertable(ordertable_OrderType, ordertable_OrderDateTime, ordertable_CustPrice, ordertable_BusPrice, ordertable_IsComplete, customer_CustID)
@@ -109,7 +103,6 @@ INSERT INTO pizza VALUES
 (NULL,@ord3,'Large','Original','completed',@dt3,14.88,3.30),
 (NULL,@ord3,'Large','Original','completed',@dt3,14.88,3.30),
 (NULL,@ord3,'Large','Original','completed',@dt3,14.88,3.30);
-
 INSERT INTO pizza VALUES (NULL,@ord6,'Large','Thin','completed','2025-01-02 18:17:00',25.81,3.64);
 INSERT INTO pizza VALUES (NULL,@ord1,'Large','Thin','completed','2025-01-05 12:03:00',19.75,3.68);
 INSERT INTO pizza VALUES (NULL,@ord7,'Large','Thin','completed','2025-02-13 20:32:00',18.00,2.75);
@@ -130,7 +123,7 @@ SELECT @p5 := @p1 + 4;
 SELECT @p6 := @p1 + 5;
 SELECT @p7 := (SELECT pizza_PizzaID FROM pizza WHERE ordertable_OrderID=@ord6 LIMIT 1);
 SELECT @p8 := (SELECT pizza_PizzaID FROM pizza WHERE ordertable_OrderID=@ord1 LIMIT 1);
-SELECT @p9 := (SELECT MIN(pizza_PizzaID) FROM pizza WHERE ordertable_OrderID=@ord7);
+SELECT @p9  := (SELECT MIN(pizza_PizzaID) FROM pizza WHERE ordertable_OrderID=@ord7);
 SELECT @p10 := @p9 + 1;
 SELECT @p11 := (SELECT MIN(pizza_PizzaID) FROM pizza WHERE ordertable_OrderID=@ord2);
 SELECT @p12 := @p11 + 1;
@@ -140,7 +133,7 @@ SELECT @p15 := @p14 + 1;
 SELECT @p16 := @p14 + 2;
 
 -- discounts: order- and pizza-level
-INSERT INTO pizza_discount SELECT @p8, discount_DiscountID FROM discount WHERE discount_DiscountName='Lunch Special Large';
+INSERT INTO pizza_discount SELECT @p8,  discount_DiscountID FROM discount WHERE discount_DiscountName='Lunch Special Large';
 INSERT INTO order_discount SELECT @ord2, discount_DiscountID FROM discount WHERE discount_DiscountName='Lunch Special Medium';
 INSERT INTO pizza_discount SELECT @p12, discount_DiscountID FROM discount WHERE discount_DiscountName='Specialty Pizza';
 INSERT INTO order_discount SELECT @ord4, discount_DiscountID FROM discount WHERE discount_DiscountName='Gameday Special';
@@ -161,6 +154,7 @@ INSERT INTO pizza_topping VALUES (@p7,(SELECT topping_TopID FROM topping WHERE t
 INSERT INTO pizza_topping VALUES (@p8,(SELECT topping_TopID FROM topping WHERE topping_TopName='Regular Cheese'),0);
 INSERT INTO pizza_topping VALUES (@p9,(SELECT topping_TopID FROM topping WHERE topping_TopName='Regular Cheese'),0);
 INSERT INTO pizza_topping VALUES (@p10,(SELECT topping_TopID FROM topping WHERE topping_TopName='Regular Cheese'),0);
+
 INSERT INTO pizza_topping VALUES (@p1,(SELECT topping_TopID FROM topping WHERE topping_TopName='Pepperoni'),0);
 INSERT INTO pizza_topping VALUES (@p2,(SELECT topping_TopID FROM topping WHERE topping_TopName='Pepperoni'),0);
 INSERT INTO pizza_topping VALUES (@p3,(SELECT topping_TopID FROM topping WHERE topping_TopName='Pepperoni'),0);
@@ -171,6 +165,7 @@ INSERT INTO pizza_topping VALUES (@p7,(SELECT topping_TopID FROM topping WHERE t
 INSERT INTO pizza_topping VALUES (@p8,(SELECT topping_TopID FROM topping WHERE topping_TopName='Pepperoni'),0);
 INSERT INTO pizza_topping VALUES (@p9,(SELECT topping_TopID FROM topping WHERE topping_TopName='Pepperoni'),0);
 INSERT INTO pizza_topping VALUES (@p10,(SELECT topping_TopID FROM topping WHERE topping_TopName='Pepperoni'),0);
+
 INSERT INTO pizza_topping VALUES (@p11,(SELECT topping_TopID FROM topping WHERE topping_TopName='Four Cheese Blend'),0);
 INSERT INTO pizza_topping VALUES (@p12,(SELECT topping_TopID FROM topping WHERE topping_TopName='Four Cheese Blend'),0);
 INSERT INTO pizza_topping VALUES (@p13,(SELECT topping_TopID FROM topping WHERE topping_TopName='Four Cheese Blend'),0);
@@ -178,12 +173,15 @@ INSERT INTO pizza_topping VALUES (@p14,(SELECT topping_TopID FROM topping WHERE 
 INSERT INTO pizza_topping VALUES (@p15,(SELECT topping_TopID FROM topping WHERE topping_TopName='Four Cheese Blend'),0);
 INSERT INTO pizza_topping VALUES (@p16,(SELECT topping_TopID FROM topping WHERE topping_TopName='Four Cheese Blend'),0);
 INSERT INTO pizza_topping VALUES (@p7,(SELECT topping_TopID FROM topping WHERE topping_TopName='Four Cheese Blend'),0);
+
 INSERT INTO pizza_topping VALUES (@p14,(SELECT topping_TopID FROM topping WHERE topping_TopName='Chicken'),0);
 INSERT INTO pizza_topping VALUES (@p15,(SELECT topping_TopID FROM topping WHERE topping_TopName='Chicken'),0);
 INSERT INTO pizza_topping VALUES (@p16,(SELECT topping_TopID FROM topping WHERE topping_TopName='Chicken'),0);
+
 INSERT INTO pizza_topping VALUES (@p11,(SELECT topping_TopID FROM topping WHERE topping_TopName='Mushrooms'),0);
 INSERT INTO pizza_topping VALUES (@p12,(SELECT topping_TopID FROM topping WHERE topping_TopName='Mushrooms'),0);
 INSERT INTO pizza_topping VALUES (@p13,(SELECT topping_TopID FROM topping WHERE topping_TopName='Mushrooms'),0);
+
 INSERT INTO pizza_topping VALUES (@p8,(SELECT topping_TopID FROM topping WHERE topping_TopName='Banana Peppers'),0);
 INSERT INTO pizza_topping VALUES (@p9,(SELECT topping_TopID FROM topping WHERE topping_TopName='Banana Peppers'),0);
 INSERT INTO pizza_topping VALUES (@p10,(SELECT topping_TopID FROM topping WHERE topping_TopName='Black Olives'),0);
