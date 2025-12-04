@@ -1,49 +1,37 @@
 package cpsc4620;
 
-import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class DBConnector {
 
-    protected static String user = "root";
-    protected static String password = "Aryan.Panchal@007";  // your password
-    protected static String database_name = "PizzaDB";
+    // *** KEEP THESE MATCHED TO WHATEVER YOUR COURSE EXPECTS ***
+    private static final String URL      = "jdbc:mysql://localhost:3306/PizzaDB?useSSL=false&serverTimezone=UTC";
+    private static final String USER     = "root";         // or whatever your instructor told you
+    private static final String PASSWORD = "Aryan.Panchal@007";         // or whatever your instructor told you
 
-    // NOTE: include the database name in the URL
-    private static String url =
-            "jdbc:mysql://localhost:3306/" + database_name + "?serverTimezone=UTC&useSSL=false";
-
-    private static Connection conn = null;
-
-    public static Connection make_connection() throws SQLException, IOException {
+    public static Connection make_connection() {
         try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
+            // Try MySQL 8+ driver first
+            try {
+                Class.forName("com.mysql.cj.jdbc.Driver");
+            } catch (ClassNotFoundException e) {
+                // Fallback to older 5.x driver name
+                Class.forName("com.mysql.jdbc.Driver");
+            }
+
+            // If we got here, one of the driver classes loaded successfully
+            return DriverManager.getConnection(URL, USER, PASSWORD);
+
         } catch (ClassNotFoundException e) {
             System.out.println("Could not load the driver");
             System.out.println("Message : " + e.getMessage());
-            return null;
-        }
-
-        try {
-            conn = DriverManager.getConnection(url, user, password);
-            return conn;
         } catch (SQLException e) {
-            System.out.println("Could not connect to database");
+            System.out.println("Could not connect to the database");
             System.out.println("Message : " + e.getMessage());
-            return null;
         }
-    }
 
-    public static void close_connection() throws SQLException {
-        if (conn != null && !conn.isClosed()) {
-            conn.close();
-            conn = null;
-        }
-    }
-
-    public static Connection getConnection() {
-        return conn;
+        return null;
     }
 }
