@@ -20,7 +20,7 @@ public class DineinOrder extends Order {
                        double custPrice, double busPrice,
                        boolean isComplete, int tableNum) {
         // OrderType must be DBNinja.dine_in ("dinein" in the DB)
-        super(orderID, custID, DBNinja.dinein, date, custPrice, busPrice, isComplete);
+        super(orderID, custID, DBNinja.dine_in, date, custPrice, busPrice, isComplete);
         this.TableNum = tableNum;
     }
 
