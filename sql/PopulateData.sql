@@ -394,4 +394,3 @@ INSERT INTO pizza_topping VALUES (@p9 ,(SELECT topping_TopID FROM topping WHERE 
 INSERT INTO pizza_topping VALUES (@p10,(SELECT topping_TopID FROM topping WHERE topping_TopName='Goat Cheese'),0);
 
 COMMIT;
-``` :contentReference[oaicite:0]{index=0}
