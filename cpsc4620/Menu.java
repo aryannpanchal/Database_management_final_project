@@ -17,7 +17,6 @@ import java.util.Date;
  *
  */
 
-
 public class Menu {
     public static BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
 
@@ -334,6 +333,7 @@ public class Menu {
                 System.out.println("What is the date you want to restrict by? (FORMAT= YYYY-MM-DD)");
                 String date = reader.readLine();
                 String[] splitDate = date.split("-");
+                // Print off high level information about the order
                 currOrders = DBNinja.getOrdersByDate(date);
                 for (Order o : currOrders) {
                     System.out.println(o.toSimplePrint());
@@ -424,6 +424,8 @@ public class Menu {
     public static void AddInventory() throws SQLException, IOException {
         ArrayList<Topping> curInventory = DBNinja.getToppingList();
         printInventory(curInventory);
+        //DBNinja.printInventory();
+        // select a topping to add inventory to
 
         System.out.println("Which topping do you want to add inventory to? Enter the number: ");
         int chosen_t = Integer.parseInt(reader.readLine());
@@ -489,6 +491,7 @@ public class Menu {
 
         // add toppings to the pizza
         int TopID = 0;
+        //DBNinja.printInventory();
         ArrayList<Topping> tops = DBNinja.getToppingList();
         Topping myTop = null;
         printInventory(tops);
@@ -503,7 +506,8 @@ public class Menu {
             }
 
             //do we have enough toppings?
-            if (myTop.getCurINVT() > myTop.getMinINVT()) {
+            if (myTop.getCurINVT() > myTop.getMinINVT())//we use -1 because the DB starts at index 1 and java starts at index 0
+            {
                 boolean isExtra = false;
                 System.out.println("Do you want to add extra topping? Enter y/n");
                 String yn = reader.readLine();
@@ -554,8 +558,12 @@ public class Menu {
         System.out.printf("%-5s%-25s%-20s\n", "ID", "Discount Name", "Amount");
         System.out.printf("%-5s%-25s%-20s\n", "--", "------------", "-------");
         for (Discount d : discs) {
-            System.out.printf("%-5s%-25s%-20s\n", d.getDiscountID(), d.getDiscountName(),
-                    ((d.isPercent()) ? "" : "$") + d.getAmount() + ((d.isPercent()) ? "%" : ""));
+            System.out.printf(
+                    "%-5s%-25s%-20s\n",
+                    d.getDiscountID(),
+                    d.getDiscountName(),
+                    ((d.isPercent()) ? "" : "$") + d.getAmount() + ((d.isPercent()) ? "%" : "")
+            );
         }
     }
 
@@ -597,7 +605,6 @@ public class Menu {
             Topping.printToppings(pizza.getToppings());
         }
     }
-
 
     // NO CODE SHOULD TAKE BE PLACED BELOW THIS LINE
     // DO NOT EDIT ANYTHING BELOW HERE, THIS IS NEEDED FOR TESTING.
@@ -642,7 +649,7 @@ public class Menu {
             Date dts = new Date();
 
             DBNinja.addOrder(o);
-            DBNinja.addPizza(dts, id, p);
+            DBNinja.addPizza(new java.sql.Date(dts.getTime()), id, p);
             id = DBNinja.addCustomer(c);
             DBNinja.completeOrder(o.getOrderID(), DBNinja.order_state.PREPARED);
             alo = DBNinja.getOrders(1);
@@ -669,6 +676,5 @@ public class Menu {
             e.printStackTrace();
         }
     }
-
 
 }
