@@ -1,0 +1,167 @@
+package cpsc4620;
+
+import java.util.ArrayList;
+
+public class Pizza {
+    private int PizzaID;
+    private String CrustType;
+    private String Size;
+    private int OrderID;
+    private String PizzaState;
+    private String PizzaDate;
+    private double CustPrice;
+    private double BusPrice;
+    private ArrayList<Topping> Toppings;
+    private ArrayList<Discount> Discounts;
+
+    public Pizza(int pizzaID, String size, String crustType, int orderID,
+                 String pizzaState, String pizzaDate,
+                 double custPrice, double busPrice) {
+        this.PizzaID = pizzaID;
+        this.CrustType = crustType;
+        this.Size = size;
+        this.OrderID = orderID;
+        this.PizzaState = pizzaState;
+        this.PizzaDate = pizzaDate;
+        this.CustPrice = custPrice;
+        this.BusPrice = busPrice;
+        this.Toppings = new ArrayList<>();
+        this.Discounts = new ArrayList<>();
+    }
+
+    public int getPizzaID() {
+        return PizzaID;
+    }
+
+    public String getCrustType() {
+        return CrustType;
+    }
+
+    public String getSize() {
+        return Size;
+    }
+
+    public int getOrderID() {
+        return OrderID;
+    }
+
+    public String getPizzaState() {
+        return PizzaState;
+    }
+
+    public String getPizzaDate() {
+        return PizzaDate;
+    }
+
+    public double getCustPrice() {
+        return CustPrice;
+    }
+
+    public double getBusPrice() {
+        return BusPrice;
+    }
+
+    public ArrayList<Topping> getToppings() {
+        return Toppings;
+    }
+
+    public ArrayList<Discount> getDiscounts() {
+        return Discounts;
+    }
+
+    public void setPizzaID(int pizzaID) {
+        PizzaID = pizzaID;
+    }
+
+    public void setCrustType(String crustType) {
+        CrustType = crustType;
+    }
+
+    public void setSize(String size) {
+        Size = size;
+    }
+
+    public void setOrderID(int orderID) {
+        OrderID = orderID;
+    }
+
+    public void setPizzaState(String pizzaState) {
+        PizzaState = pizzaState;
+    }
+
+    public void setPizzaDate(String pizzaDate) {
+        PizzaDate = pizzaDate;
+    }
+
+    public void setCustPrice(double custPrice) {
+        CustPrice = custPrice;
+    }
+
+    public void setBusPrice(double busPrice) {
+        BusPrice = busPrice;
+    }
+
+    public void setToppings(ArrayList<Topping> toppings) {
+        Toppings = toppings;
+    }
+
+    public void setDiscounts(ArrayList<Discount> discounts) {
+        Discounts = discounts;
+    }
+
+    /**
+     * Add a topping to this pizza and update prices accordingly.
+     *
+     * @param t       topping to add
+     * @param isExtra whether the topping is doubled
+     */
+    public void addToppings(Topping t, boolean isExtra) {
+        Toppings.add(t);
+
+        double unitsNeeded;
+
+        // Use correct amount per size
+        if (Size.equals(DBNinja.size_s)) {
+            unitsNeeded = t.getSmallAMT();
+        } else if (Size.equals(DBNinja.size_m)) {
+            unitsNeeded = t.getMedAMT();
+        } else if (Size.equals(DBNinja.size_l)) {
+            unitsNeeded = t.getLgAMT();   // fixed: was using XL amount before
+        } else {
+            unitsNeeded = t.getXLAMT();
+        }
+
+        if (isExtra) {
+            this.BusPrice += unitsNeeded * t.getBusPrice() * 2;
+            this.CustPrice += unitsNeeded * t.getCustPrice() * 2;
+        } else {
+            this.BusPrice += unitsNeeded * t.getBusPrice();
+            this.CustPrice += unitsNeeded * t.getCustPrice();
+        }
+    }
+
+    /**
+     * Add a discount to this pizza and update the customer price.
+     * (Business price does not change.)
+     */
+    public void addDiscounts(Discount d) {
+        Discounts.add(d);
+        if (d.isPercent()) {
+            this.CustPrice = (this.CustPrice * (1 - d.getAmount() / 100.0));
+        } else {
+            this.CustPrice -= d.getAmount();
+        }
+    }
+
+    @Override
+    public String toString() {
+        return "PizzaID=" + PizzaID +
+                " | CrustType= " + CrustType +
+                ", Size= " + Size +
+                " | For order " + OrderID +
+                " | Pizza Status: " + PizzaState +
+                ", as of " + PizzaDate +
+                " | Customer Price= " + CustPrice +
+                " | Business Price= " + BusPrice;
+    }
+}
