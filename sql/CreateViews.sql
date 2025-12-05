@@ -1,13 +1,11 @@
 -- ==========================
 -- CreateViews.sql (FINAL)
 -- ==========================
--- Student Name: Aryan Panchal
-
 USE PizzaDB;
 
--- --------------------------
--- ToppingPopularity
--- --------------------------
+-- ============================================================
+-- 1. TOPPING POPULARITY
+-- ============================================================
 
 DROP VIEW IF EXISTS ToppingPopularity;
 
@@ -18,21 +16,19 @@ SELECT
         SUM(
             CASE
                 WHEN pt.pizza_topping_IsDouble = 1 THEN 2
-                WHEN pt.pizza_topping_IsDouble = 0 THEN 1
-                ELSE 0
+                ELSE 1
             END
-        ),
-        0
+        ), 0
     ) AS ToppingCount
 FROM topping t
 LEFT JOIN pizza_topping pt
-    ON pt.topping_TopID = t.topping_TopID
+    ON t.topping_TopID = pt.topping_TopID
 GROUP BY t.topping_TopName
 ORDER BY ToppingCount DESC, Topping ASC;
 
--- --------------------------
--- ProfitByPizza
--- --------------------------
+-- ============================================================
+-- 2. PROFIT BY PIZZA
+-- ============================================================
 
 DROP VIEW IF EXISTS ProfitByPizza;
 
@@ -41,51 +37,46 @@ SELECT
     CONCAT(UCASE(LEFT(p.pizza_Size,1)), SUBSTRING(p.pizza_Size,2)) AS Size,
     p.pizza_CrustType AS Crust,
     SUM(p.pizza_CustPrice - p.pizza_BusPrice) AS Profit,
-    DATE_FORMAT(p.pizza_PizzaDate, '%c/%Y') AS OrderMonth
+    DATE_FORMAT(p.pizza_PizzaDate, '%m/%Y') AS OrderMonth
 FROM pizza p
 GROUP BY
     CONCAT(UCASE(LEFT(p.pizza_Size,1)), SUBSTRING(p.pizza_Size,2)),
     p.pizza_CrustType,
-    DATE_FORMAT(p.pizza_PizzaDate, '%c/%Y')
-ORDER BY Profit ASC;
+    DATE_FORMAT(p.pizza_PizzaDate, '%m/%Y')
+ORDER BY Profit DESC, Size ASC, Crust ASC;
 
--- --------------------------
--- ProfitByOrderType
--- --------------------------
+-- ============================================================
+-- 3. PROFIT BY ORDER TYPE
+-- ============================================================
 
 DROP VIEW IF EXISTS ProfitByOrderType;
 
 CREATE VIEW ProfitByOrderType AS
-SELECT *
-FROM (
-    -- per-order-type, per-month rows
-    SELECT
-        CAST(ot.ordertable_OrderType AS CHAR(20)) AS CustomerType,
-        CAST(DATE_FORMAT(ot.ordertable_OrderDateTime, '%c/%Y') AS CHAR(20)) AS OrderMonth,
-        SUM(ot.ordertable_CustPrice) AS TotalOrderPrice,
-        SUM(ot.ordertable_BusPrice) AS TotalOrderCost,
-        SUM(ot.ordertable_CustPrice - ot.ordertable_BusPrice) AS Profit
-    FROM ordertable ot
-    GROUP BY ot.ordertable_OrderType,
-             DATE_FORMAT(ot.ordertable_OrderDateTime, '%c/%Y')
+SELECT
+    ot.ordertable_OrderType AS CustomerType,
+    DATE_FORMAT(ot.ordertable_OrderDateTime, '%m/%Y') AS OrderMonth,
+    SUM(ot.ordertable_CustPrice) AS TotalOrderPrice,
+    SUM(ot.ordertable_BusPrice) AS TotalOrderCost,
+    SUM(ot.ordertable_CustPrice - ot.ordertable_BusPrice) AS Profit
+FROM ordertable ot
+GROUP BY ot.ordertable_OrderType,
+         DATE_FORMAT(ot.ordertable_OrderDateTime, '%m/%Y')
 
-    UNION ALL
+UNION ALL
 
-    -- grand total row
-    SELECT
-        CAST('' AS CHAR(20)) AS CustomerType,
-        CAST('Grand Total' AS CHAR(20)) AS OrderMonth,
-        SUM(ot.ordertable_CustPrice) AS TotalOrderPrice,
-        SUM(ot.ordertable_BusPrice) AS TotalOrderCost,
-        SUM(ot.ordertable_CustPrice - ot.ordertable_BusPrice) AS Profit
-    FROM ordertable ot
-) rows_
+SELECT
+    'Total' AS CustomerType,
+    '' AS OrderMonth,
+    SUM(ot.ordertable_CustPrice),
+    SUM(ot.ordertable_BusPrice),
+    SUM(ot.ordertable_CustPrice - ot.ordertable_BusPrice)
+FROM ordertable ot
+
 ORDER BY
-    CASE rows_.CustomerType
-        WHEN 'dinein'  THEN 1
-        WHEN 'delivery' THEN 2
-        WHEN 'pickup'  THEN 3
-        WHEN ''        THEN 4  -- grand total
-        ELSE 5
+    CASE CustomerType
+        WHEN 'dinein' THEN 1
+        WHEN 'pickup' THEN 2
+        WHEN 'delivery' THEN 3
+        WHEN 'Total' THEN 4
     END,
-    rows_.Profit ASC;
+    OrderMonth ASC;
