@@ -767,7 +767,8 @@ public class DBNinja {
                     double custPrice = rs.getDouble("pizza_CustPrice");
                     double busPrice = rs.getDouble("pizza_BusPrice");
 
-                    Pizza p = new Pizza(pizzaID, crust, size, orderID, state, dateStr, custPrice, busPrice);
+                    // FIX: pass size, then crust to match Pizza constructor
+                    Pizza p = new Pizza(pizzaID, size, crust, orderID, state, dateStr, custPrice, busPrice);
                     p.setToppings(getToppingsOnPizza(p));
                     p.setDiscounts(getDiscounts(p));
                     list.add(p);
