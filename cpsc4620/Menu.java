@@ -143,8 +143,17 @@ public class Menu {
 					int DiscountID = Integer.parseInt(reader.readLine());
 
 					while (DiscountID != -1) {
-						Discount temp = discs.get(DiscountID - 1);//same deal as above
-						myDineInOrder.addDiscount(temp);//this not only adds it to the order, but also modifies the two prices as needed.
+						// find Discount by its actual ID
+						Discount temp = null;
+						for (Discount d : discs) {
+							if (d.getDiscountID() == DiscountID) {
+								temp = d;
+								break;
+							}
+						}
+						if (temp != null) {
+							myDineInOrder.addDiscount(temp);
+						}
 
 						printDiscounts(discs);
 						System.out.println("Which Order Discount do you want to add? \nEnter the Discount ID. Enter -1 to stop adding Discounts: ");
@@ -193,8 +202,16 @@ public class Menu {
 					int DiscountID = Integer.parseInt(reader.readLine());
 
 					while (DiscountID != -1) {
-						Discount temp = discs.get(DiscountID - 1);//same deal as above
-						myPickupOrder.addDiscount(temp);//this not only adds it to the order, but also modifies the two prices as needed.
+						Discount temp = null;
+						for (Discount d : discs) {
+							if (d.getDiscountID() == DiscountID) {
+								temp = d;
+								break;
+							}
+						}
+						if (temp != null) {
+							myPickupOrder.addDiscount(temp);
+						}
 
 						printDiscounts(discs);
 						System.out.println("Which Order Discount do you want to add? \nEnter the Discount ID. Enter -1 to stop adding Discounts: ");
@@ -256,8 +273,16 @@ public class Menu {
 					int DiscountID = Integer.parseInt(reader.readLine());
 
 					while (DiscountID != -1) {
-						Discount temp = discs.get(DiscountID - 1);//same deal as above
-						myDeliveryOrder.addDiscount(temp);//this not only adds it to the order, but also modifies the two prices as needed.
+						Discount temp = null;
+						for (Discount d : discs) {
+							if (d.getDiscountID() == DiscountID) {
+								temp = d;
+								break;
+							}
+						}
+						if (temp != null) {
+							myDeliveryOrder.addDiscount(temp);
+						}
 
 						printDiscounts(discs);
 						System.out.println("Which Order Discount do you want to add? \nEnter the Discount ID. Enter -1 to stop adding Discounts: ");
@@ -563,8 +588,16 @@ public class Menu {
 			int DiscountID = Integer.parseInt(reader.readLine());
 
 			while (DiscountID != -1) {
-				Discount temp = discs.get(DiscountID - 1);//same deal as above
-				newPizza.addDiscounts(temp);//this not only adds it to the pizza, but also modifies the two prices as needed.
+				Discount temp = null;
+				for (Discount d : discs) {
+					if (d.getDiscountID() == DiscountID) {
+						temp = d;
+						break;
+					}
+				}
+				if (temp != null) {
+					newPizza.addDiscounts(temp);
+				}
 
 				printDiscounts(discs);
 				System.out.println("Which Pizza Discount do you want to add? \nEnter the Discount ID. Enter -1 to stop adding Discounts: ");
@@ -578,31 +611,26 @@ public class Menu {
 		return newPizza;
 	}
 
-	// index-based IDs 1..N for the on-screen list
+	// FIXED: Uses getTopID() instead of index when printing
 	private static void printInventory(ArrayList<Topping> tops) {
 		System.out.printf("%-5s%-20s%-20s%n", "ID", "Topping Name", "Inventory");
 		System.out.printf("%-5s%-20s%-20s%n", "--", "------------", "---------");
-		for (int i = 0; i < tops.size(); i++) {
-			Topping t = tops.get(i);
-			System.out.printf("%-5d%-20s%-20s%n",
-					i + 1,                // 1-based index
-					t.getTopName(),
-					t.getCurINVT());
+		for (Topping t : tops) {
+			System.out.printf("%-5s%-20s%-20s%n", t.getTopID(), t.getTopName(), t.getCurINVT());
 		}
 	}
 
-	// index-based IDs 1..N for the on-screen list
+	// FIXED: Uses DiscountID instead of list index when printing
 	private static void printDiscounts(ArrayList<Discount> discs) {
 		System.out.printf("%-5s%-25s%-20s%n", "ID", "Discount Name", "Amount");
 		System.out.printf("%-5s%-25s%-20s%n", "--", "------------", "-------");
-		for (int i = 0; i < discs.size(); i++) {
-			Discount d = discs.get(i);
-			String amt = (d.isPercent() ? "" : "$") + d.getAmount()
-					+ (d.isPercent() ? "%" : "");
-			System.out.printf("%-5d%-25s%-20s%n",
-					i + 1,                // 1-based index
-					d.getDiscountName(),
-					amt);
+		for (Discount d : discs) {
+			System.out.printf(
+				"%-5s%-25s%-20s%n",
+				d.getDiscountID(),
+				d.getDiscountName(),
+				((d.isPercent()) ? "" : "$") + d.getAmount() + ((d.isPercent()) ? "%" : "")
+			);
 		}
 	}
 
