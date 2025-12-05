@@ -116,6 +116,8 @@ public class Pizza {
      * @param isExtra whether the topping is doubled
      */
     public void addToppings(Topping t, boolean isExtra) {
+        // mark the topping as doubled or not so DBNinja can store it correctly
+        t.setDoubled(isExtra);
         Toppings.add(t);
 
         double unitsNeeded;
@@ -126,7 +128,7 @@ public class Pizza {
         } else if (Size.equals(DBNinja.size_m)) {
             unitsNeeded = t.getMedAMT();
         } else if (Size.equals(DBNinja.size_l)) {
-            unitsNeeded = t.getLgAMT();   // fixed: was using XL amount before
+            unitsNeeded = t.getLgAMT(); // Large uses LgAMT
         } else {
             unitsNeeded = t.getXLAMT();
         }
