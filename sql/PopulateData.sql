@@ -17,14 +17,14 @@ INSERT INTO baseprice(baseprice_Size, baseprice_CrustType, baseprice_CustPrice, 
 ('Large','Original',8,2),
 ('Large','Pan',9,3),
 ('Large','Thin',8,1.25),
-('medium','Gluten-Free',6.25,3),
-('medium','Original',5,1.5),
-('medium','Pan',6,2.25),
-('medium','Thin',5,1),
-('small','Gluten-Free',4,2),
-('small','Original',3,0.75),
-('small','Pan',3.5,1),
-('small','Thin',3,0.5),
+('Medium','Gluten-Free',6.25,3),
+('Medium','Original',5,1.5),
+('Medium','Pan',6,2.25),
+('Medium','Thin',5,1),
+('Small','Gluten-Free',4,2),
+('Small','Original',3,0.75),
+('Small','Pan',3.5,1),
+('Small','Thin',3,0.5),
 ('XLarge','Gluten-Free',12.5,6),
 ('XLarge','Original',10,3),
 ('XLarge','Pan',11.5,4.5),
@@ -108,8 +108,8 @@ INSERT INTO pizza VALUES (NULL,@ord6,'Large','Thin','completed','2025-01-02 18:1
 INSERT INTO pizza VALUES (NULL,@ord1,'Large','Thin','completed','2025-01-05 12:03:00',19.75,3.68);
 INSERT INTO pizza VALUES (NULL,@ord7,'Large','Thin','completed','2025-02-13 20:32:00',18.00,2.75);
 INSERT INTO pizza VALUES (NULL,@ord7,'Large','Thin','completed','2025-02-13 20:32:00',19.25,3.25);
-INSERT INTO pizza VALUES (NULL,@ord2,'small','Original','completed','2025-02-03 12:05:00',6.93,1.40);
-INSERT INTO pizza VALUES (NULL,@ord2,'medium','Pan','completed','2025-02-03 12:05:00',13.85,3.23);
+INSERT INTO pizza VALUES (NULL,@ord2,'Small','Original','completed','2025-02-03 12:05:00',6.93,1.40);
+INSERT INTO pizza VALUES (NULL,@ord2,'Medium','Pan','completed','2025-02-03 12:05:00',13.85,3.23);
 INSERT INTO pizza VALUES (NULL,@ord5,'XLarge','Gluten-Free','completed','2025-01-02 17:30:00',28.70,7.84);
 INSERT INTO pizza VALUES (NULL,@ord4,'XLarge','Original','completed','2025-02-20 19:11:00',26.75,5.55);
 INSERT INTO pizza VALUES (NULL,@ord4,'XLarge','Original','completed','2025-02-20 19:11:00',27.94,5.59);
