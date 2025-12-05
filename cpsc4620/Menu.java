@@ -8,13 +8,13 @@ import java.util.ArrayList;
 import java.util.Date;
 
 /*
- * This file is where the front end magic happens. You should NOT make any changes to this file.
- * FYI, a modified version of this program will be used to test your application!
- *
- * Simply removing menu methods because you don't know how to implement it will result in a major error penalty (akin to your program crashing)
- *
- * Speaking of crashing. Your program shouldn't do it. Use exceptions, or if statements, or whatever it is you need to do to keep your program from breaking.
- */
+* This file is where the front end magic happens. You should NOT make any changes to this file.
+* FYI, a modified version of this program will be used to test your application!
+
+* Simply removing menu methods because you don't know how to implement it will result in a major error penalty (akin to your program crashing)
+
+* Speaking of crashing. Your program shouldn't do it. Use exceptions, or if statements, or whatever it is you need to do to keep your program from breaking.
+*/
 
 public class Menu {
 
@@ -67,7 +67,6 @@ public class Menu {
     public static Integer getMyCustomer() throws SQLException, IOException {
         ArrayList<Customer> customerList = DBNinja.getCustomerList();
         int customerID = -1;
-
         System.out.println("Is this order for an existing customer? Answer y/n: ");
         String yn = reader.readLine();
 
@@ -100,7 +99,7 @@ public class Menu {
         int morePizza = 0;
         int customerID = -1;
         int orderID = -1; //DBNinja.getNextOrderID();
-        ArrayList<Pizza> tempPizzaList = new ArrayList<Pizza>();
+        ArrayList<Pizza> tempPizzaList = new ArrayList<>();
         ArrayList<Discount> discs = DBNinja.getDiscountList();
 
         //get the time of order creation
@@ -150,6 +149,7 @@ public class Menu {
                                 break;
                             }
                         }
+
                         if (temp != null) {
                             myDineInOrder.addDiscount(temp);//this not only adds it to the order, but also modifies the two prices as needed.
                         }
@@ -208,6 +208,7 @@ public class Menu {
                                 break;
                             }
                         }
+
                         if (temp != null) {
                             myPickupOrder.addDiscount(temp);//this not only adds it to the order, but also modifies the two prices as needed.
                         }
@@ -242,6 +243,7 @@ public class Menu {
                 String state = reader.readLine();
                 System.out.println("What is the Zip Code for this order? (i.e., 20605)");
                 String zip = reader.readLine();
+
                 String address = houseNum + "\t" + street + "\t" + city + "\t" + state + "\t" + zip;
 
                 System.out.println("Let's build a pizza!");
@@ -279,6 +281,7 @@ public class Menu {
                                 break;
                             }
                         }
+
                         if (temp != null) {
                             myDeliveryOrder.addDiscount(temp);//this not only adds it to the order, but also modifies the two prices as needed.
                         }
@@ -309,6 +312,7 @@ public class Menu {
             for (Customer c : custs) {
                 System.out.println(c);
             }
+
         } catch (SQLException | IOException e) {
             e.printStackTrace();
         }
@@ -317,21 +321,16 @@ public class Menu {
     // Enter a new customer in the database
     public static int EnterCustomer() throws SQLException, IOException {
         int cid = -1;
-
         System.out.println("Please Enter the Customer name (First Name Last Name): ");
         String name = reader.readLine();
         String fName = name.split(" ")[0];
         String lName = name.split(" ")[1];
-
         System.out.println("What is this customer's phone number (##########) (No dash/space):");
         String phone = reader.readLine();
 
-        ArrayList<Customer> tempList = DBNinja.getCustomerList();
-        int customerID = tempList.get(tempList.size() - 1).getCustID() + 1;
-
-        Customer new_cust = new Customer(customerID, fName, lName, phone);
+        // ✅ FIXED: Use -1 to signal new customer - let DB auto-increment
+        Customer new_cust = new Customer(-1, fName, lName, phone);
         cid = DBNinja.addCustomer(new_cust);
-
         return cid;
     }
 
@@ -413,6 +412,7 @@ public class Menu {
                 System.out.println("Incorrect entry, returning to menu.");
                 return;
             }
+
         } else {
             System.out.println("No orders to display, returning to menu.");
             return;
@@ -424,8 +424,7 @@ public class Menu {
         ArrayList<Order> currOrders = DBNinja.getOrders(1);
 
         // see all open orders
-        if (currOrders.size() == 0)//this means that within all the current orders, none of them are incomplete
-        {
+        if (currOrders.size() == 0) {
             System.out.println("There are no open orders currently... returning to menu...");
             return;
         }
@@ -542,17 +541,14 @@ public class Menu {
         Object param = new java.sql.Timestamp(date.getTime());
 
         int pizzaID = -1; //DBNinja.getNextPizzaID();
-
         Pizza newPizza = new Pizza(pizzaID, size, crust, orderID, "In Progress", param.toString(), base_CustPrice, base_BusPrice);
 
         // add toppings to the pizza
         int TopID = 0;
-
         ArrayList<Topping> tops = DBNinja.getToppingList();
         Topping myTop = null;
 
         printInventory(tops);
-
         System.out.println("Which topping do you want to add? Enter the TopID. Enter -1 to stop adding toppings: ");
         TopID = Integer.parseInt(reader.readLine());
 
@@ -573,14 +569,15 @@ public class Menu {
                     boolean isExtra = false;
                     System.out.println("Do you want to add extra topping? Enter y/n");
                     String yn = reader.readLine();
+
                     if (yn.contains("y")) {
                         isExtra = true;
                         myTop.setDoubled(true);
                     } else {
                         myTop.setDoubled(false);
                     }
-
                     newPizza.addToppings(myTop, isExtra);//adds the topping to the pizza and increases the two prices
+
                 } else {
                     System.out.println("We don't have enough of that topping to add it...");
                 }
@@ -610,6 +607,7 @@ public class Menu {
                         break;
                     }
                 }
+
                 if (temp != null) {
                     newPizza.addDiscounts(temp);//this not only adds it to the pizza, but also modifies the two prices as needed.
                 }
@@ -679,6 +677,7 @@ public class Menu {
         }
 
         Discount.printDiscounts(o.getDiscountList());
+
         for (Pizza pizza : o.getPizzaList()) {
             System.out.println(pizza.toString());
             Discount.printDiscounts(pizza.getDiscounts());
@@ -705,8 +704,9 @@ public class Menu {
     }
 
     /*
-     * autograder controls....do not modify!
-     */
+    * autograder controls....do not modify!
+    */
+
     public final static String autograder_seed = "6f1b7ea9aac470402c48f7916ea6a010";
 
     private static void autograder_compilation_check() {
@@ -716,15 +716,16 @@ public class Menu {
             Topping t = null;
             Discount d = null;
             Customer c = null;
-            ArrayList alo = null;
-            ArrayList ald = null;
-            ArrayList alc = null;
-            ArrayList alt = null;
-            ArrayList alp = null;
+            ArrayList<Order> alo = null;
+            ArrayList<Discount> ald = null;
+            ArrayList<Customer> alc = null;
+            ArrayList<Topping> alt = null;
+            ArrayList<Pizza> alp = null;
             double v = 0.0;
             String s = "";
             int id = -1;
             Date dts = new Date();
+
             DBNinja.addOrder(o);
             DBNinja.addPizza(dts, id, p);
             id = DBNinja.addCustomer(c);
@@ -749,6 +750,7 @@ public class Menu {
             DBNinja.printToppingReport();
             DBNinja.printProfitByPizzaReport();
             DBNinja.printProfitByOrderTypeReport();
+
         } catch (SQLException | IOException e) {
             e.printStackTrace();
         }

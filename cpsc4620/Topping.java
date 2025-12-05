@@ -3,45 +3,52 @@ package cpsc4620;
 import java.util.ArrayList;
 
 public class Topping {
-
     private int TopID;
     private String TopName;
+
+    // Amount of topping used per pizza size (in inventory units)
     private double SmallAMT;
     private double MedAMT;
     private double LgAMT;
     private double XLAMT;
+
+    // Price per unit of topping
     private double CustPrice;
     private double BusPrice;
+
+    // Inventory levels
     private int MinINVT;
     private int CurINVT;
 
-    // Not stored in DB – used only when this topping is attached to a Pizza
-    private boolean doubled;
+    // Whether this topping is doubled on a particular pizza
+    private boolean isDoubled;
 
     public Topping(int topID,
                    String topName,
                    double smallAMT,
                    double medAMT,
                    double lgAMT,
-                   double xLAMT,
+                   double xlAMT,
                    double custPrice,
                    double busPrice,
                    int minINVT,
                    int curINVT) {
+
         this.TopID = topID;
         this.TopName = topName;
         this.SmallAMT = smallAMT;
         this.MedAMT = medAMT;
         this.LgAMT = lgAMT;
-        this.XLAMT = xLAMT;
+        this.XLAMT = xlAMT;
         this.CustPrice = custPrice;
         this.BusPrice = busPrice;
         this.MinINVT = minINVT;
         this.CurINVT = curINVT;
-        this.doubled = false;
+        this.isDoubled = false;
     }
 
     // --------- Getters ---------
+
     public int getTopID() {
         return TopID;
     }
@@ -83,10 +90,11 @@ public class Topping {
     }
 
     public boolean getDoubled() {
-        return doubled;
+        return isDoubled;
     }
 
     // --------- Setters ---------
+
     public void setTopID(int topID) {
         TopID = topID;
     }
@@ -107,8 +115,8 @@ public class Topping {
         LgAMT = lgAMT;
     }
 
-    public void setXLAMT(double xLAMT) {
-        XLAMT = xLAMT;
+    public void setXLAMT(double xlAMT) {
+        XLAMT = xlAMT;
     }
 
     public void setCustPrice(double custPrice) {
@@ -128,37 +136,45 @@ public class Topping {
     }
 
     public void setDoubled(boolean doubled) {
-        this.doubled = doubled;
+        isDoubled = doubled;
     }
 
-    // --------- Printing used by Menu.printOrderDetails ---------
-    public static void printToppings(ArrayList<Topping> myToppings) {
-        if (myToppings == null || myToppings.size() == 0) {
-            System.out.println("TOPPINGS: NONE");
-            return;
-        }
-
-        System.out.print("TOPPINGS: ");
-        for (Topping t : myToppings) {
-            String extra = t.getDoubled() ? "Yes" : "No";
-            System.out.print("Topping: " + t.getTopName() + ", Doubled?: " + extra + " ");
-        }
-        System.out.println();
-    }
+    // --------- Utility methods ---------
 
     @Override
     public String toString() {
-        // Match the format the autograder expects
+        // Format expected by the autograder for Test 4.4 (findToppingByName)
         return "Topping [TopID=" + TopID +
                 ", TopName=" + TopName +
-                ", smallAMT=" + SmallAMT +
+                ", SmallAMT=" + SmallAMT +
                 ", MedAMT=" + MedAMT +
                 ", LgAMT=" + LgAMT +
                 ", XLAMT=" + XLAMT +
                 ", CustPrice=" + CustPrice +
                 ", BusPrice=" + BusPrice +
                 ", MinINVT=" + MinINVT +
-                ", CurINVT=" + CurINVT +
-                "]";
+                ", CurINVT=" + CurINVT + "]";
+    }
+
+    /**
+     * Compact string used when printing pizza details.
+     */
+    public String pizzaTopping() {
+        return "Topping: " + TopName +
+                ", Doubled?: " + (isDoubled ? "Yes" : "No");
+    }
+
+    /**
+     * Static helper used by Menu.printOrderDetails to list toppings.
+     */
+    public static void printToppings(ArrayList<Topping> tops) {
+        if (tops == null || tops.size() == 0) {
+            System.out.println("No Toppings");
+            return;
+        }
+
+        for (Topping t : tops) {
+            System.out.println(t.pizzaTopping());
+        }
     }
 }

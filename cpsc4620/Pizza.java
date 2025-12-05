@@ -3,6 +3,7 @@ package cpsc4620;
 import java.util.ArrayList;
 
 public class Pizza {
+
     private int PizzaID;
     private String CrustType;
     private String Size;
@@ -15,8 +16,8 @@ public class Pizza {
     private ArrayList<Discount> Discounts;
 
     public Pizza(int pizzaID, String size, String crustType, int orderID,
-                 String pizzaState, String pizzaDate,
-                 double custPrice, double busPrice) {
+            String pizzaState, String pizzaDate,
+            double custPrice, double busPrice) {
         this.PizzaID = pizzaID;
         this.CrustType = crustType;
         this.Size = size;
@@ -37,6 +38,10 @@ public class Pizza {
         return CrustType;
     }
 
+    public String getCrust() {
+        return CrustType;
+    }
+
     public String getSize() {
         return Size;
     }
@@ -46,6 +51,10 @@ public class Pizza {
     }
 
     public String getPizzaState() {
+        return PizzaState;
+    }
+
+    public String getStatus() {
         return PizzaState;
     }
 
@@ -109,26 +118,17 @@ public class Pizza {
         Discounts = discounts;
     }
 
-    /**
-     * Add a topping to this pizza and update prices accordingly.
-     *
-     * @param t       topping to add
-     * @param isExtra whether the topping is doubled
-     */
     public void addToppings(Topping t, boolean isExtra) {
-        // mark the topping as doubled or not so DBNinja can store it correctly
         t.setDoubled(isExtra);
         Toppings.add(t);
-
         double unitsNeeded;
 
-        // Use correct amount per size
         if (Size.equals(DBNinja.size_s)) {
             unitsNeeded = t.getSmallAMT();
         } else if (Size.equals(DBNinja.size_m)) {
             unitsNeeded = t.getMedAMT();
         } else if (Size.equals(DBNinja.size_l)) {
-            unitsNeeded = t.getLgAMT(); // Large uses LgAMT
+            unitsNeeded = t.getLgAMT();
         } else {
             unitsNeeded = t.getXLAMT();
         }
@@ -142,10 +142,6 @@ public class Pizza {
         }
     }
 
-    /**
-     * Add a discount to this pizza and update the customer price.
-     * (Business price does not change.)
-     */
     public void addDiscounts(Discount d) {
         Discounts.add(d);
         if (d.isPercent()) {
