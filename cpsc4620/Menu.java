@@ -578,26 +578,31 @@ public class Menu {
 		return newPizza;
 	}
 
-	// FIXED: Uses getTopID() instead of index
+	// index-based IDs 1..N for the on-screen list
 	private static void printInventory(ArrayList<Topping> tops) {
 		System.out.printf("%-5s%-20s%-20s%n", "ID", "Topping Name", "Inventory");
 		System.out.printf("%-5s%-20s%-20s%n", "--", "------------", "---------");
-		for (Topping t : tops) {
-			System.out.printf("%-5s%-20s%-20s%n", t.getTopID(), t.getTopName(), t.getCurINVT());
+		for (int i = 0; i < tops.size(); i++) {
+			Topping t = tops.get(i);
+			System.out.printf("%-5d%-20s%-20s%n",
+					i + 1,                // 1-based index
+					t.getTopName(),
+					t.getCurINVT());
 		}
 	}
 
-	// FIXED: Uses getDiscountID() instead of index
+	// index-based IDs 1..N for the on-screen list
 	private static void printDiscounts(ArrayList<Discount> discs) {
 		System.out.printf("%-5s%-25s%-20s%n", "ID", "Discount Name", "Amount");
 		System.out.printf("%-5s%-25s%-20s%n", "--", "------------", "-------");
-		for (Discount d : discs) {
-			System.out.printf(
-				"%-5s%-25s%-20s%n",
-				d.getDiscountID(),
-				d.getDiscountName(),
-				((d.isPercent()) ? "" : "$") + d.getAmount() + ((d.isPercent()) ? "%" : "")
-			);
+		for (int i = 0; i < discs.size(); i++) {
+			Discount d = discs.get(i);
+			String amt = (d.isPercent() ? "" : "$") + d.getAmount()
+					+ (d.isPercent() ? "%" : "");
+			System.out.printf("%-5d%-25s%-20s%n",
+					i + 1,                // 1-based index
+					d.getDiscountName(),
+					amt);
 		}
 	}
 
