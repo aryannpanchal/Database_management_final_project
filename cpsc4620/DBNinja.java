@@ -7,7 +7,7 @@ import java.util.Date;
 
 /**
  * DBNinja.java
- * 
+ *
  * - Matches autograder expectations.
  * - Keeps ordering fixes for toppings/discounts/customers.
  * - getCustomerName() now returns "IN STORE" for dine-in / null customers.
@@ -19,20 +19,20 @@ public class DBNinja {
     // -------------------------
 
     // Pizza sizes
-    public static final String size_s  = "Small";
-    public static final String size_m  = "Medium";
-    public static final String size_l  = "Large";
+    public static final String size_s = "Small";
+    public static final String size_m = "Medium";
+    public static final String size_l = "Large";
     public static final String size_xl = "XLarge";
 
     // Crust types
     public static final String crust_thin = "Thin";
     public static final String crust_orig = "Original";
-    public static final String crust_pan  = "Pan";
-    public static final String crust_gf   = "Gluten-Free";
+    public static final String crust_pan = "Pan";
+    public static final String crust_gf = "Gluten-Free";
 
     // Order types (must match DB strings)
-    public static final String dine_in  = "dinein";
-    public static final String pickup   = "pickup";
+    public static final String dine_in = "dinein";
+    public static final String pickup = "pickup";
     public static final String delivery = "delivery";
 
     // Order state enum used by Menu/autograder
@@ -65,7 +65,7 @@ public class DBNinja {
 
     private static String normalizeTimestamp(Timestamp ts) {
         if (ts == null) return "";
-        String raw = ts.toString();      // e.g. 2025-01-03 21:30:00.0
+        String raw = ts.toString(); // e.g. 2025-01-03 21:30:00.0
         if (raw.endsWith(".0")) {
             raw = raw.substring(0, raw.length() - 2);
         }
@@ -78,7 +78,6 @@ public class DBNinja {
 
     public static void addOrder(Order o) throws SQLException, IOException {
         if (o == null) return;
-
         connectToDB();
 
         try {
@@ -221,7 +220,6 @@ public class DBNinja {
 
     public static int addPizza(Date d, int orderID, Pizza p) throws SQLException, IOException {
         if (p == null) return -1;
-
         connectToDB();
 
         int pizzaID = -1;
@@ -316,7 +314,6 @@ public class DBNinja {
 
     public static int addCustomer(Customer c) throws SQLException, IOException {
         if (c == null) return -1;
-
         connectToDB();
 
         String sql =
@@ -621,10 +618,8 @@ public class DBNinja {
         }
 
         connectToDB();
-
         String name = "IN STORE";
         String sql = "SELECT customer_FName, customer_LName FROM customer WHERE customer_CustID = ?";
-
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, custID);
             try (ResultSet rs = ps.executeQuery()) {
@@ -633,7 +628,6 @@ public class DBNinja {
                 }
             }
         }
-
         return name;
     }
 
@@ -928,6 +922,7 @@ public class DBNinja {
                 }
             }
             order = new DineinOrder(orderID, custID, dateStr, custPrice, busPrice, isComplete, tableNum);
+
         } else if (orderType.equals(pickup)) {
             boolean pickedUp = false;
             String sql = "SELECT pickup_IsPickedUp FROM pickup WHERE ordertable_OrderID = ?";
@@ -940,6 +935,7 @@ public class DBNinja {
                 }
             }
             order = new PickupOrder(orderID, custID, dateStr, custPrice, busPrice, pickedUp, isComplete);
+
         } else if (orderType.equals(delivery)) {
             int houseNum = 0;
             String street = "";
@@ -970,6 +966,7 @@ public class DBNinja {
             DeliveryOrder d = new DeliveryOrder(orderID, custID, dateStr, custPrice, busPrice, isComplete, addr);
             d.setIsDelivered(delivered);
             order = d;
+
         } else {
             // fallback generic order if type is weird
             order = new Order(orderID, custID, orderType, dateStr, custPrice, busPrice, isComplete);
