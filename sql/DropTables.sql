@@ -1,23 +1,29 @@
--- ==========================
--- DropTables.sql (FINAL)
--- ==========================
--- Student Name: Aryan Panchal
+-- ============================================================
+-- DropTables.sql
+-- Purpose: Drop all tables in PizzaDB safely.
+-- ============================================================
 
+-- Use the PizzaDB schema
 USE PizzaDB;
 
-DROP VIEW IF EXISTS ProfitByOrderType;
-DROP VIEW IF EXISTS ProfitByPizza;
-DROP VIEW IF EXISTS ToppingPopularity;
+-- Temporarily disable foreign key checks so we can drop tables
+-- in any order without violating constraints.
+SET FOREIGN_KEY_CHECKS = 0;
 
-DROP TABLE IF EXISTS order_discount;
+-- Drop child tables first (discount bridges, toppings mapping, etc.)
 DROP TABLE IF EXISTS pizza_discount;
+DROP TABLE IF EXISTS order_discount;
 DROP TABLE IF EXISTS pizza_topping;
-DROP TABLE IF EXISTS pizza;
-DROP TABLE IF EXISTS delivery;
-DROP TABLE IF EXISTS pickup;
 DROP TABLE IF EXISTS dinein;
+DROP TABLE IF EXISTS pickup;
+DROP TABLE IF EXISTS delivery;
+DROP TABLE IF EXISTS pizza;
+DROP TABLE IF EXISTS ordertable;
 DROP TABLE IF EXISTS discount;
 DROP TABLE IF EXISTS topping;
-DROP TABLE IF EXISTS ordertable;
-DROP TABLE IF EXISTS baseprice;
 DROP TABLE IF EXISTS customer;
+DROP TABLE IF EXISTS baseprice;
+
+-- Re-enable foreign key checks
+SET FOREIGN_KEY_CHECKS = 1;
+

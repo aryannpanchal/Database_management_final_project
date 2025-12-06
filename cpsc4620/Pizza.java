@@ -1,165 +1,210 @@
 package cpsc4620;
-
 import java.util.ArrayList;
 
-public class Pizza {
+public class Pizza 
+{
+	private int PizzaID;
+	private String CrustType;
+	private String Size;
+	private int OrderID;
+	private String PizzaState;
+	private String PizzaDate;
+	private double CustPrice;
+	private double BusPrice;
+	private ArrayList<Topping> Toppings;
+	//private boolean[] isToppingDoubled;//each index in this array will represent whether the topping at Toppings.get(index) is doubled.
+	private ArrayList<Discount> Discounts;
+	
+	public Pizza(int pizzaID, String size, String crustType, int orderID, String pizzaState, String pizzaDate,
+			double custPrice, double busPrice) {
+		PizzaID = pizzaID;
+		CrustType = crustType;
+		Size = size;
+		OrderID = orderID;
+		PizzaState = pizzaState;
+		PizzaDate = pizzaDate;
+		CustPrice = custPrice;
+		BusPrice = busPrice;
+		Toppings = new ArrayList<Topping>();
+		//isToppingDoubled = new boolean[17];//We have 17 toppings, the array needs to be size 17. A good programmer wouldn't hard code this.
+		Discounts = new ArrayList<Discount>();
+	}
 
-    private int PizzaID;
-    private String CrustType;
-    private String Size;
-    private int OrderID;
-    private String PizzaState;
-    private String PizzaDate;
-    private double CustPrice;
-    private double BusPrice;
-    private ArrayList<Topping> Toppings;
-    private ArrayList<Discount> Discounts;
+	public int getPizzaID() {
+		return PizzaID;
+	}
 
-    public Pizza(int pizzaID, String size, String crustType, int orderID,
-            String pizzaState, String pizzaDate,
-            double custPrice, double busPrice) {
-        this.PizzaID = pizzaID;
-        this.CrustType = crustType;
-        this.Size = size;
-        this.OrderID = orderID;
-        this.PizzaState = pizzaState;
-        this.PizzaDate = pizzaDate;
-        this.CustPrice = custPrice;
-        this.BusPrice = busPrice;
-        this.Toppings = new ArrayList<>();
-        this.Discounts = new ArrayList<>();
-    }
 
-    public int getPizzaID() {
-        return PizzaID;
-    }
 
-    public String getCrustType() {
-        return CrustType;
-    }
+	public String getCrustType() {
+		return CrustType;
+	}
 
-    public String getCrust() {
-        return CrustType;
-    }
 
-    public String getSize() {
-        return Size;
-    }
 
-    public int getOrderID() {
-        return OrderID;
-    }
+	public String getSize() {
+		return Size;
+	}
 
-    public String getPizzaState() {
-        return PizzaState;
-    }
 
-    public String getStatus() {
-        return PizzaState;
-    }
 
-    public String getPizzaDate() {
-        return PizzaDate;
-    }
+	public int getOrderID() {
+		return OrderID;
+	}
 
-    public double getCustPrice() {
-        return CustPrice;
-    }
 
-    public double getBusPrice() {
-        return BusPrice;
-    }
 
-    public ArrayList<Topping> getToppings() {
-        return Toppings;
-    }
+	public String getPizzaState() {
+		return PizzaState;
+	}
 
-    public ArrayList<Discount> getDiscounts() {
-        return Discounts;
-    }
 
-    public void setPizzaID(int pizzaID) {
-        PizzaID = pizzaID;
-    }
 
-    public void setCrustType(String crustType) {
-        CrustType = crustType;
-    }
+	public String getPizzaDate() {
+		return PizzaDate;
+	}
 
-    public void setSize(String size) {
-        Size = size;
-    }
 
-    public void setOrderID(int orderID) {
-        OrderID = orderID;
-    }
 
-    public void setPizzaState(String pizzaState) {
-        PizzaState = pizzaState;
-    }
+	public double getCustPrice() {
+		return CustPrice;
+	}
 
-    public void setPizzaDate(String pizzaDate) {
-        PizzaDate = pizzaDate;
-    }
 
-    public void setCustPrice(double custPrice) {
-        CustPrice = custPrice;
-    }
 
-    public void setBusPrice(double busPrice) {
-        BusPrice = busPrice;
-    }
+	public double getBusPrice() {
+		return BusPrice;
+	}
 
-    public void setToppings(ArrayList<Topping> toppings) {
-        Toppings = toppings;
-    }
 
-    public void setDiscounts(ArrayList<Discount> discounts) {
-        Discounts = discounts;
-    }
 
-    public void addToppings(Topping t, boolean isExtra) {
-        t.setDoubled(isExtra);
-        Toppings.add(t);
-        double unitsNeeded;
+	public ArrayList<Topping> getToppings() {
+		return Toppings;
+	}
 
-        if (Size.equals(DBNinja.size_s)) {
-            unitsNeeded = t.getSmallAMT();
-        } else if (Size.equals(DBNinja.size_m)) {
-            unitsNeeded = t.getMedAMT();
-        } else if (Size.equals(DBNinja.size_l)) {
-            unitsNeeded = t.getLgAMT();
-        } else {
-            unitsNeeded = t.getXLAMT();
-        }
 
-        if (isExtra) {
-            this.BusPrice += unitsNeeded * t.getBusPrice() * 2;
-            this.CustPrice += unitsNeeded * t.getCustPrice() * 2;
-        } else {
-            this.BusPrice += unitsNeeded * t.getBusPrice();
-            this.CustPrice += unitsNeeded * t.getCustPrice();
-        }
-    }
 
-    public void addDiscounts(Discount d) {
-        Discounts.add(d);
-        if (d.isPercent()) {
-            this.CustPrice = (this.CustPrice * (1 - d.getAmount() / 100.0));
-        } else {
-            this.CustPrice -= d.getAmount();
-        }
-    }
+	public ArrayList<Discount> getDiscounts() {
+		return Discounts;
+	}
 
-    @Override
-    public String toString() {
-        return "PizzaID=" + PizzaID +
-                " | CrustType= " + CrustType +
-                ", Size= " + Size +
-                " | For order " + OrderID +
-                " | Pizza Status: " + PizzaState +
-                ", as of " + PizzaDate +
-                " | Customer Price= " + CustPrice +
-                " | Business Price= " + BusPrice;
-    }
+
+
+	public void setPizzaID(int pizzaID) {
+		PizzaID = pizzaID;
+	}
+
+
+
+	public void setCrustType(String crustType) {
+		CrustType = crustType;
+	}
+
+
+
+	public void setSize(String size) {
+		Size = size;
+	}
+
+
+
+	public void setOrderID(int orderID) {
+		OrderID = orderID;
+	}
+
+
+
+	public void setPizzaState(String pizzaState) {
+		PizzaState = pizzaState;
+	}
+
+
+
+	public void setPizzaDate(String pizzaDate) {
+		PizzaDate = pizzaDate;
+	}
+
+
+
+	public void setCustPrice(double custPrice) {
+		CustPrice = custPrice;
+	}
+
+
+
+	public void setBusPrice(double busPrice) {
+		BusPrice = busPrice;
+	}
+
+
+
+	public void setToppings(ArrayList<Topping> toppings) {
+		Toppings = toppings;
+	}
+
+	public void setDiscounts(ArrayList<Discount> discounts) {
+		Discounts = discounts;
+	}
+
+	public void addToppings(Topping t, boolean isExtra)
+	{
+		Toppings.add(t);
+
+		double unitsNeeded = 0.0;
+
+		if (Size.equals(DBNinja.size_s)) {
+			unitsNeeded = t.getSmallAMT();
+		} else if (Size.equals(DBNinja.size_m)) {
+			unitsNeeded = t.getMedAMT();
+		} else if (Size.equals(DBNinja.size_l)) {
+			unitsNeeded = t.getXLAMT();
+		} else {
+			unitsNeeded = t.getXLAMT();
+		}
+
+
+		//also add to the prices of the pizza
+		if(isExtra)
+		{
+			this.BusPrice += unitsNeeded*t.getBusPrice()*2;
+			this.CustPrice += unitsNeeded*t.getCustPrice()*2;
+		}
+		else
+		{
+			this.BusPrice += unitsNeeded*t.getBusPrice();
+			this.CustPrice += unitsNeeded*t.getCustPrice();
+		}
+
+	}
+	
+	public void addDiscounts(Discount d)
+	{
+		Discounts.add(d);
+		if(d.isPercent())
+		{
+			this.CustPrice = (this.CustPrice*(1-d.getAmount()/100.0));
+		}
+		else
+		{
+			this.CustPrice -= d.getAmount();
+		}
+	}
+
+//	public void modifyDoubledArray(int index, boolean b)
+//	{
+//		isToppingDoubled[index] = b;
+//	}
+//
+//	public boolean[] getIsDoubleArray()
+//	{
+//		return isToppingDoubled;
+//	}
+	
+	@Override
+	public String toString() {
+		return "PizzaID=" + PizzaID + " | CrustType= " + CrustType + ", Size= " + Size + " | For order " + OrderID
+				+ " | Pizza Status: " + PizzaState + ", as of " + PizzaDate + " | Customer Price= " + CustPrice + " | Business Price= "
+				+ BusPrice;
+	}
+
 }
