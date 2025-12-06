@@ -5,7 +5,7 @@ public class DineinOrder extends Order{
 	private int TableNum;
 	
 	public DineinOrder(int orderID, int custID, String date, double custPrice, double busPrice, boolean isComplete, int tablenum) {
-		super(orderID, custID, DBNinja.dine_in, date, custPrice, busPrice, isComplete);
+		super(orderID, custID, DBNinja.DINE_IN, date, custPrice, busPrice, isComplete);
 		this.TableNum = tablenum;
 	}
 

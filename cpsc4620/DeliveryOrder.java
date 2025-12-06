@@ -8,13 +8,13 @@ public class DeliveryOrder extends Order
 
 	public DeliveryOrder(int orderID, int custID, String date, double custPrice, double busPrice, boolean isComplete, String address)
 	{
-		super(orderID, custID, DBNinja.delivery, date, custPrice, busPrice, isComplete);
+		super(orderID, custID, DBNinja.DELIVERY, date, custPrice, busPrice, isComplete);
 		this.Address = address;
 		this.isDelivered = false;
 	}
 	public DeliveryOrder(int orderID, int custID, String date, double custPrice, double busPrice, boolean isComplete, boolean isDelivered, String address)
 	{
-		super(orderID, custID, DBNinja.delivery, date, custPrice, busPrice, isComplete);
+		super(orderID, custID, DBNinja.DELIVERY, date, custPrice, busPrice, isComplete);
 		this.Address = address;
 		this.isDelivered = isDelivered;
 	}
@@ -31,6 +31,10 @@ public class DeliveryOrder extends Order
 	public String toString() {
 		return super.toString() + " | Delivered to: " + Address + " | Order Delivered: " + ((isDelivered)?"Yes":"No");
 	}
+
+    boolean getIsDelivered() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
 	
 	
 }
