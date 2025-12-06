@@ -152,11 +152,11 @@ public class Pizza
 
 		double unitsNeeded = 0.0;
 
-		if (Size.equals(DBNinja.SIZE_SMALL)) {
+		if (Size.equals(DBNinja.size_s)) {
 			unitsNeeded = t.getSmallAMT();
-		} else if (Size.equals(DBNinja.SIZE_MEDIUM)) {
+		} else if (Size.equals(DBNinja.size_m)) {
 			unitsNeeded = t.getMedAMT();
-		} else if (Size.equals(DBNinja.SIZE_LARGE)) {
+		} else if (Size.equals(DBNinja.size_l)) {
 			unitsNeeded = t.getXLAMT();
 		} else {
 			unitsNeeded = t.getXLAMT();

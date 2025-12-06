@@ -499,40 +499,40 @@ public class Menu {
 
 		// select size
 		System.out.println("What size is the pizza?");
-		System.out.println("1."+DBNinja.SIZE_SMALL);
-		System.out.println("2."+DBNinja.SIZE_MEDIUM);
-		System.out.println("3."+DBNinja.SIZE_LARGE);
-		System.out.println("4."+DBNinja.SIZE_XLARGE);
+		System.out.println("1."+DBNinja.size_s);
+		System.out.println("2."+DBNinja.size_m);
+		System.out.println("3."+DBNinja.size_l);
+		System.out.println("4."+DBNinja.size_xl);
 		System.out.println("Enter the corresponding number: ");
 		int size_option = Integer.parseInt(reader.readLine());
 		String size = "";
 		if (size_option == 1) {
-			size = DBNinja.SIZE_SMALL;
+			size = DBNinja.size_s;
 		} else if (size_option == 2) {
-			size = DBNinja.SIZE_MEDIUM;
+			size = DBNinja.size_m;
 		} else if (size_option == 3) {
-			size = DBNinja.SIZE_LARGE;
+			size = DBNinja.size_l;
 		} else {
-			size = DBNinja.SIZE_XLARGE;
+			size = DBNinja.size_xl;
 		}
 
 		// select crust
 		System.out.println("What crust for this pizza?");
-		System.out.println("1."+DBNinja.CRUST_THIN);
-		System.out.println("2."+DBNinja.CRUST_ORIGINAL);
-		System.out.println("3."+DBNinja.CRUST_PAN);
-		System.out.println("4."+DBNinja.CRUST_GLUTEN_FREE);
+		System.out.println("1."+DBNinja.crust_thin);
+		System.out.println("2."+DBNinja.crust_orig);
+		System.out.println("3."+DBNinja.crust_pan);
+		System.out.println("4."+DBNinja.crust_gf);
 		System.out.println("Enter the corresponding number: ");
 		int c_option = Integer.parseInt(reader.readLine());
 		String crust = "";
 		if (c_option == 1) {
-			crust = DBNinja.CRUST_THIN;
+			crust = DBNinja.crust_thin;
 		} else if (c_option == 2) {
-			crust = DBNinja.CRUST_ORIGINAL;
+			crust = DBNinja.crust_orig;
 		} else if (c_option == 3) {
-			crust = DBNinja.CRUST_PAN;
+			crust = DBNinja.crust_pan;
 		} else {
-			crust = DBNinja.CRUST_GLUTEN_FREE;
+			crust = DBNinja.crust_gf;
 		}
 
 		// get the base prices
